@@ -21,18 +21,29 @@ provider "aws" {
 
 resource "aws_default_vpc" "default" {} # This need to be added since AWS Provider v4.29+ to get VPC id
 
+resource "aws_eip" "web" {
+  instance = aws_instance.web.id
+  tags = {
+    Name : "EIP for WebServer  Built By Terraform"
+    Owner : "Mustofa"
+  }
+}
+
 resource "aws_instance" "web" {
   ami                    = "ami-026b57f3c383c2eec" // Amazon Linux2
   instance_type          = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.web.id]
+  vpc_security_group_ids = [aws_security_group.my-sg.id]
   key_name               = "demo"
   user_data = templatefile("user-data.sh.tpl", {
     f_name           = "Mustofa",
     l_name           = "Kodirov",
     wanted_countries = ["UAE", "USA", "Canada", "Egypt"]
   })
+  lifecycle {
+    create_before_destroy = true
+  }
 }
-resource "aws_security_group" "web" {
+resource "aws_security_group" "my-sg" {
   name        = "WebServer-SG"
   description = "Security Group for my WebServer"
   vpc_id      = aws_default_vpc.default.id # This need to be added since AWS Provider v4.29+ to set VPC id
@@ -40,7 +51,7 @@ resource "aws_security_group" "web" {
   dynamic "ingress" {
     for_each = ["80", "443", "22"]
     content {
-      description = "Allow port HTTP and HTTPS SSh also"
+      description = "Allow port HTTP and HTTPS SSH also"
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
