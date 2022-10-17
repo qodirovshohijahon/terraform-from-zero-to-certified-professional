@@ -26,7 +26,12 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name               = "demo"
-  user_data              = file("user-data.sh")
+  user_data              = templatefile("user-data.sh.tpl", {
+    f_name = "Mustofa",
+    l_name = "Kodirov",
+    wanted_countries = ["UAE","USA","Canada","Egypt"]
+  })
+
   tags = {
     Name  = "WebServer Built by Terraform"
     Owner = "Mustofa Kodirov"
@@ -44,6 +49,7 @@ resource "aws_security_group" "web" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    
   }
   ingress {
     description = "Allow port SSH"
