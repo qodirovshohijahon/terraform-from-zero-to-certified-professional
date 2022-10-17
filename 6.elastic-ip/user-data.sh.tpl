@@ -5,7 +5,9 @@ MYIP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
 
 cat <<EOF > /var/www/html/index.html
 <html>
-<h2>Built by Power of Terraform</h2>
+<h2>Built by Power of Terraform Version v0.0.4</h2>
+
+<h3>Edited with Elastic IP</h3>
 
 Server Owner is ${f_name} ${l_name}
 %{ for x in wanted_countries ~}
