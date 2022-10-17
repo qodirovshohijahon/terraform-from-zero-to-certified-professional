@@ -1,7 +1,7 @@
 #----------------------------------------------------------
 #  Terraform - From Zero to Certified Professional
 #
-# Build WebServer during Bootstrap
+# Build WebServer during Bootstrap External Template File
 #
 # Made by Mustofa Kodirov
 #----------------------------------------------------------
@@ -22,20 +22,11 @@ provider "aws" {
 resource "aws_default_vpc" "default" {} # This need to be added since AWS Provider v4.29+ to get VPC id
 
 resource "aws_instance" "web" {
-  ami                    = "ami-026b57f3c383c2eec" // Amazon Linux2
+  ami                    = "ami-026b57f3c383c2eec" // Amazon Linux Image ID
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name               = "demo"
-
-  user_data = <<EOF
-#!/bin/bash
-yum -y update
-yum -y install httpd
-MYIP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
-echo "<h2>WebServer with PrivateIP: $MYIP</h2><br>Built by Terraform" > /var/www/html/index.html
-service httpd start
-chkconfig httpd on
-EOF
+  user_data              = file("user-data.sh")
   tags = {
     Name  = "WebServer Built by Terraform"
     Owner = "Mustofa Kodirov"
