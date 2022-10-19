@@ -1,0 +1,4 @@
+Terraform command execution time START: Wed Oct 19 10:28:18 UTC 2022
+Hello I am Ali in PROD
+172.31.4.122
+Terraform FINISH: Wed Oct 19 10:29:57 UTC 2022
