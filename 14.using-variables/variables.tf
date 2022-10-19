@@ -5,23 +5,23 @@ variable "region" {
 }
 
 variable "port_list" {
-    description = "List of Port to open for Web Server"
-    type = list(any)
-    default = ["80", "443"]
+  description = "List of Port to open for Web Server"
+  type        = list(any)
+  default     = ["80", "443"]
 }
 
 variable "instance_size" {
   description = "EC2 Instance Size"
-    type = string
-    default = "t3.micro"
+  type        = string
+  default     = "t3.micro"
 }
 
 variable "tags" {
   description = "Tags to Apply to Resources"
-    type = map(any)
-    default = {
-      Owner= "Mustofa Kodir"
-      Environment="Prod"
-      Project = "Phoenix"
-    }
+  type        = map(any)
+  default = {
+    Owner       = "Mustofa Kodir"
+    Environment = "Prod"
+    Project     = "Phoenix"
+  }
 }

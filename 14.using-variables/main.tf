@@ -37,15 +37,15 @@ data "aws_ami" "latest_amazon_linux" {
 
 resource "aws_eip" "eip_web" {
   instance = aws_instance.web.id
-  tags = merge(var.tags, { Name= "${var.tags["Environment"]}-EIP for Web Server Built by Terraform" })
+  tags     = merge(var.tags, { Name = "${var.tags["Environment"]}-EIP for Web Server Built by Terraform" })
 }
 
 resource "aws_instance" "web" {
-  ami           = data.aws_ami.latest_amazon_linux.id
-  instance_type = "t3.micro"
+  ami                    = data.aws_ami.latest_amazon_linux.id
+  instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
-  user_data = file("user_data.sh")
-  tags = merge(var.tags, { Name= "${var.tags["Environment"]}-Web Server Built by Terraform" })
+  user_data              = file("user_data.sh")
+  tags                   = merge(var.tags, { Name = "${var.tags["Environment"]}-Web Server Built by Terraform" })
 
   lifecycle {
     create_before_destroy = true
@@ -70,5 +70,5 @@ resource "aws_security_group" "web" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags =  merge(var.tags, { Name="${var.tags["Environment"]}-Web Security Group" })
-  }
+  tags = merge(var.tags, { Name = "${var.tags["Environment"]}-Web Security Group" })
+}
